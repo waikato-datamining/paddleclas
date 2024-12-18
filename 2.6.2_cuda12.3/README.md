@@ -1,35 +1,8 @@
-# Detectron2
+# PaddleClas
 
-Uses [Detectron2](https://github.com/facebookresearch/detectron2) ([documentation](https://detectron2.readthedocs.io/en/v2024-06-12/)). 
+Uses [PaddleClas](https://github.com/PaddlePaddle/PaddleClas) ([documentation](https://paddleclas.readthedocs.io/en/latest/)). 
 
-Uses PyTorch 2.3.0, CUDA 12.1 and Detectron2 2024-06-12.
-
-Though Detectron2 is installed via a wheel file, you can find Detectron2's source code \
-inside the container in:
-
-```bash
-/opt/detectron2
-```
-
-Additional code is located in:
-
-```bash
-/opt/detectron2_ext
-```
-
-## Version
-
-Detectron2 github repo hash:
-
-```
-e8806d607403cf0f2634d4c5ac464109fdc7d4af
-```
-
-and timestamp:
-
-```
-June 12, 2024
-```
+Uses PyTorch 2.3.1, CUDA 12.3 and PaddleClas 2.6.2.
 
 ## Quick start
 
@@ -46,7 +19,7 @@ June 12, 2024
   ```bash
   docker run --gpus=all --shm-size 8G --net=host \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2024-06-12
+    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/paddleclas:2.6.2_cuda12.3
   ```
 
 ### Docker hub
@@ -56,21 +29,21 @@ June 12, 2024
   ```bash
   docker run --gpus=all --shm-size 8G --net=host \
     -v /local/dir:/container/dir \
-    -it waikatodatamining/detectron2:2024-06-12
+    -it waikatodatamining/paddleclas:2.6.2_cuda12.3
   ```
 
 ### Build local image
 
-* Build the image from Docker file (from within /path_to/detectron2/2024-06-12)
+* Build the image from Docker file (from within /path_to/paddleclas/2.6.2_cuda12.3)
 
   ```bash
-  docker build -t detectron2 .
+  docker build -t paddleclas .
   ```
   
 * Run the container
 
   ```bash
-  docker run --gpus=all --shm-size 8G --net=host -v /local/dir:/container/dir -it detectron2
+  docker run --gpus=all --shm-size 8G --net=host -v /local/dir:/container/dir -it paddleclas
   ```
   `/local/dir:/container/dir` maps a local disk directory into a directory inside the container
 
@@ -80,7 +53,7 @@ June 12, 2024
 ### Build
 
 ```bash
-docker build -t detectron2:2024-06-12 .
+docker build -t paddleclas:2.6.2_cuda12.3 .
 ```
 
 ### Inhouse registry  
@@ -89,14 +62,14 @@ docker build -t detectron2:2024-06-12 .
 
   ```bash
   docker tag \
-    detectron2:2024-06-12 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2024-06-12
+    paddleclas:2.6.2_cuda12.3 \
+    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/paddleclas:2.6.2_cuda12.3
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2024-06-12
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/paddleclas:2.6.2_cuda12.3
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -110,14 +83,14 @@ docker build -t detectron2:2024-06-12 .
 
   ```bash
   docker tag \
-    detectron2:2024-06-12 \
-    waikatodatamining/detectron2:2024-06-12
+    paddleclas:2.6.2_cuda12.3 \
+    waikatodatamining/paddleclas:2.6.2_cuda12.3
   ```
   
 * Push
 
   ```bash
-  docker push waikatodatamining/detectron2:2024-06-12
+  docker push waikatodatamining/paddleclas:2.6.2_cuda12.3
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -130,7 +103,7 @@ docker build -t detectron2:2024-06-12 .
 
 ```bash
 docker run --rm \
-  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/detectron2:2024-06-12 \
+  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/paddleclas:2.6.2_cuda12.3 \
   pip freeze > requirements.txt
 ```
 
@@ -147,7 +120,7 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 
 ## Caching
 
-Detectron2 will download pretrained models and cache them locally. To avoid having
+PaddleClas will download pretrained models and cache them locally. To avoid having
 to download them constantly, you can the cache directory to the host machine:
 
 * when running the container as `root`
@@ -169,26 +142,4 @@ to download them constantly, you can the cache directory to the host machine:
 
 The following additional scripts are available:
 
-* `d2_train_coco` - for building a model using a COCO-based train/test set (calls `/opt/detectron2_ext/d2_train_coco.py`)
-* `d2_predict` - for generating batch predictions on images (calls `/opt/detectron2_ext/d2_predict.py`)
-* `d2_predict_redis` - for generating batch predictions on images via redis backend (calls `/opt/detectron2_ext/d2_predict_redis.py`)
-* `d2_test_image_redis` - for uploading an image to the redis backend (calls `/opt/detectron2_ext/d2_test_image_redis.py`)
-* `d2_dump_config` - expands an example configuration and saves the generated YAML output (calls `/opt/detectron2_ext/d2_dump_config.py`)
-
-### d2_train_coco
-
-* Documentation of config file parameters:
-
-  https://detectron2.readthedocs.io/en/latest/modules/config.html
-  
-* Use the following in the YAML config file for the datasets (the script registers the datasets you provide via parameters under these names):
-
-  ```yaml
-  DATASETS:
-    TRAIN: ("coco_ext_train",)
-    TEST: ("coco_ext_test",)
-  ```
-
-* `Loss became infinite or NaN at iteration=X`
-  
-  Decreasing the learning rate may help (see discussion [here](https://github.com/facebookresearch/detectron2/issues/550#issuecomment-655127445)).
+* `TODO` - TODO
