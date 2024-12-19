@@ -3,4 +3,4 @@ Docker images for PaddleClas Deep Learning visual classification framework.
 
 Available versions:
 
-* [2.6,2 (CUDA 12.3)](2.6.2_cuda12.3)
+* [2.6.0 (CUDA 11.8)](2.6.0_cuda11.8)
