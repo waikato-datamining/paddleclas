@@ -66,9 +66,37 @@ def set_value(config: dict, path: List[str], value: Any):
         print("Failed to locate path in config: %s" % str(path))
 
 
+def remove_value(config: dict, path: List[str]):
+    """
+    Removes the value from the YAML config according to its path.
+
+    :param config: the config dictionary to update
+    :type config: dict
+    :param path: the list of path elements to use for navigating the hierarchical dictionary
+    :type path: list
+    """
+    current = config
+    removed = False
+    for i in range(len(path)):
+        if path[i] in current:
+            if i < len(path) - 1:
+                current = current[path[i]]
+            else:
+                del current[path[i]]
+                removed = True
+        elif path[i].startswith("[") and path[i].endswith("]") and isinstance(current, list):
+            index = int(path[i][1:len(path[i])-1])
+            if index < len(current):
+                current = current[index]
+        else:
+            break
+    if not removed:
+        print("Failed to locate path in config: %s" % str(path))
+
+
 def export(input_file: str, output_file: str, train_annotations: str = None, val_annotations: str = None,
            num_classes: int = None, num_epochs: int = None, eval_interval: int = None, save_interval: int = None,
-           output_dir: str = None, additional: List[str] = None):
+           output_dir: str = None, additional: List[str] = None, remove: List[str] = None):
     """
     Exports the config file while updating specified parameters.
 
@@ -92,6 +120,8 @@ def export(input_file: str, output_file: str, train_annotations: str = None, val
     :type output_dir: str
     :param additional: the list of additional parameters to set, format: PATH:VALUE, with PATH being the dot-notation path through the YAML parameter hierarchy in the file; if VALUE is to update a list, then the elements must be separated by comma
     :type additional: list
+    :param remove: the list of parameters to remove, format: PATH, with PATH being the dot-notation path through the YAML parameter hierarchy in the file
+    :type remove: list
     """
     # some sanity checks
     check_file("Config file", input_file)
@@ -140,6 +170,11 @@ def export(input_file: str, output_file: str, train_annotations: str = None, val
             else:
                 print("Invalid format for additional parameter, expected PATH:VALUE but found: %s" % add)
 
+    if remove is not None:
+        for rem in remove:
+            path = rem.split(".")
+            remove_value(config, path)
+
     print("Saving config to: %s" % output_file)
     with open(output_file, "w") as fp:
         yaml.dump(config, fp)
@@ -160,19 +195,21 @@ def main(args=None):
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("-i", "--input", metavar="FILE", required=True, help="The PaddleClass YAML config file template to export.")
     parser.add_argument("-o", "--output", metavar="FILE", required=True, help="The YAML file to store the exported config file in.")
-    parser.add_argument("-O", "--output_dir", metavar="DIR", required=True, help="The directory to store all the training output in.")
+    parser.add_argument("-O", "--output_dir", metavar="DIR", required=False, help="The directory to store all the training output in.")
     parser.add_argument("-t", "--train_annotations", metavar="FILE", required=False, help="The text file with the labels for the training data (images are expected to be located below that directory).")
     parser.add_argument("-v", "--val_annotations", metavar="FILE", required=False, help="The text file with the labels for the validation data (images are expected to be located below that directory).")
     parser.add_argument("-c", "--num_classes", metavar="NUM", required=False, type=int, help="The number of classes in the dataset.")
     parser.add_argument("-e", "--num_epochs", metavar="NUM", required=False, type=int, help="The number of epochs to train.")
     parser.add_argument("--eval_interval", metavar="NUM", required=False, type=int, help="The number of epochs after which to perform an evaluation.")
     parser.add_argument("--save_interval", metavar="NUM", required=False, type=int, help="The number of epochs after which to save the current model.")
-    parser.add_argument("-a", "--additional", metavar="PATH:VALUE", required=False, help="Additional parameters to override; format: PATH:VALUE, with PATH representing the dot-notation path through the parameter hierarchy in the YAML fileif VALUE is to update a list, then the elements must be separated by comma.", nargs="*")
+    parser.add_argument("-a", "--additional", metavar="PATH:VALUE", required=False, help="Additional parameters to override; format: PATH:VALUE, with PATH representing the dot-notation path through the parameter hierarchy in the YAML file, if VALUE is to update a list, then the elements must be separated by comma.", nargs="*")
+    parser.add_argument("-r", "--remove", metavar="PATH", required=False, help="Parameters to remove; format: PATH, with PATH representing the dot-notation path through the parameter hierarchy in the YAML file", nargs="*")
     parsed = parser.parse_args(args=args)
     export(parsed.input, parsed.output,
            train_annotations=parsed.train_annotations, val_annotations=parsed.val_annotations,
            num_classes=parsed.num_classes, num_epochs=parsed.num_epochs, output_dir=parsed.output_dir,
-           eval_interval=parsed.eval_interval, save_interval=parsed.save_interval, additional=parsed.additional)
+           eval_interval=parsed.eval_interval, save_interval=parsed.save_interval,
+           additional=parsed.additional, remove=parsed.remove)
 
 
 def sys_main():

@@ -160,4 +160,5 @@ int/float/str/list types are supported.
 
 * `train_mode: progressive` - does not seem to exist and generates the following
   error message: `UnboundLocalError: cannot access local variable 'cur_magnitude' where it is not associated with a value`.
-  Simply comment out that parameter.
+  Simply comment out that parameter or use the `-r/--remove` option to remove  
+  the parameter during export.
