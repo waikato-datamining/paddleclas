@@ -154,3 +154,10 @@ Examples of setting additional parameters (`-a/--additional`):
 For lists, you can use `[X]` with X being the 0-based index. Otherwise, the
 name of the YAML value is used. Value lists use commas to separate their values. 
 int/float/str/list types are supported.
+
+
+## Troubleshooting
+
+* `train_mode: progressive` - does not seem to exist and generates the following
+  error message: `UnboundLocalError: cannot access local variable 'cur_magnitude' where it is not associated with a value`.
+  Simply comment out that parameter.
