@@ -142,7 +142,8 @@ to download them constantly, you can the cache directory to the host machine:
 
 The following additional scripts are available:
 
-* `paddleclas_export_config` - for exporting template config files and setting parameters (located in `/opt/PaddleClas/ppcls/configs`)
+* `paddleclas_export_config` - for exporting template config files and setting parameters (located in `/opt/PaddleClas/ppcls/configs`; calls the `/opt/PaddleClas/tools/export_config.py` script)
+* `paddleclas_train` - for training models (calls the `/opt/PaddleClas/tools/train.py` script)
 
 ### paddleclas_export_config
 
