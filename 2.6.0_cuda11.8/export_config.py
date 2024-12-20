@@ -67,7 +67,8 @@ def set_value(config: dict, path: List[str], value: Any):
 
 
 def export(input_file: str, output_file: str, train_annotations: str = None, val_annotations: str = None,
-           num_classes: int = None, additional: List[str] = None):
+           num_classes: int = None, num_epochs: int = None, eval_interval: int = None, save_interval: int = None,
+           output_dir: str = None, additional: List[str] = None):
     """
     Exports the config file while updating specified parameters.
 
@@ -81,6 +82,14 @@ def export(input_file: str, output_file: str, train_annotations: str = None, val
     :type val_annotations: str
     :param num_classes: the number of classes in the dataset, ignored if None
     :type num_classes: int
+    :param num_epochs: the number of epochs to train, ignored if None
+    :type num_epochs: int
+    :param eval_interval: the interval to perform evaluation, ignored if None
+    :type eval_interval: int
+    :param save_interval: the interval to save the model, ignored if None
+    :type save_interval: int
+    :param output_dir: the directory where to store all the output in, ignored if None
+    :type output_dir: str
     :param additional: the list of additional parameters to set, format: PATH:VALUE, with PATH being the dot-notation path through the YAML parameter hierarchy in the file; if VALUE is to update a list, then the elements must be separated by comma
     :type additional: list
     """
@@ -108,6 +117,19 @@ def export(input_file: str, output_file: str, train_annotations: str = None, val
 
     if num_classes is not None:
         set_value(config, ["Arch", "class_num"], num_classes)
+
+    if num_epochs is not None:
+        set_value(config, ["Global", "epochs"], num_epochs)
+
+    if eval_interval is not None:
+        set_value(config, ["Global", "eval_interval"], eval_interval)
+
+    if save_interval is not None:
+        set_value(config, ["Global", "save_interval"], save_interval)
+
+    if output_dir is not None:
+        set_value(config, ["Global", "output_dir"], output_dir)
+        set_value(config, ["Global", "save_inference_dir"], os.path.join(output_dir, "inference"))
 
     if additional is not None:
         for add in additional:
@@ -138,14 +160,19 @@ def main(args=None):
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("-i", "--input", metavar="FILE", required=True, help="The PaddleClass YAML config file template to export.")
     parser.add_argument("-o", "--output", metavar="FILE", required=True, help="The YAML file to store the exported config file in.")
+    parser.add_argument("-O", "--output_dir", metavar="DIR", required=True, help="The directory to store all the training output in.")
     parser.add_argument("-t", "--train_annotations", metavar="FILE", required=False, help="The text file with the labels for the training data (images are expected to be located below that directory).")
     parser.add_argument("-v", "--val_annotations", metavar="FILE", required=False, help="The text file with the labels for the validation data (images are expected to be located below that directory).")
     parser.add_argument("-c", "--num_classes", metavar="NUM", required=False, type=int, help="The number of classes in the dataset.")
+    parser.add_argument("-e", "--num_epochs", metavar="NUM", required=False, type=int, help="The number of epochs to train.")
+    parser.add_argument("--eval_interval", metavar="NUM", required=False, type=int, help="The number of epochs after which to perform an evaluation.")
+    parser.add_argument("--save_interval", metavar="NUM", required=False, type=int, help="The number of epochs after which to save the current model.")
     parser.add_argument("-a", "--additional", metavar="PATH:VALUE", required=False, help="Additional parameters to override; format: PATH:VALUE, with PATH representing the dot-notation path through the parameter hierarchy in the YAML fileif VALUE is to update a list, then the elements must be separated by comma.", nargs="*")
     parsed = parser.parse_args(args=args)
     export(parsed.input, parsed.output,
            train_annotations=parsed.train_annotations, val_annotations=parsed.val_annotations,
-           num_classes=parsed.num_classes, additional=parsed.additional)
+           num_classes=parsed.num_classes, num_epochs=parsed.num_epochs, output_dir=parsed.output_dir,
+           eval_interval=parsed.eval_interval, save_interval=parsed.save_interval, additional=parsed.additional)
 
 
 def sys_main():
