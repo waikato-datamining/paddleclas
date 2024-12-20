@@ -142,4 +142,15 @@ to download them constantly, you can the cache directory to the host machine:
 
 The following additional scripts are available:
 
-* `TODO` - TODO
+* `paddleclas_export_config` - for exporting template config files and setting parameters (located in `/opt/PaddleClas/ppcls/configs`)
+
+### paddleclas_export_config
+
+Examples of setting additional parameters (`-a/--additional`):
+
+* `Infer.PostProcess.topk:3`
+* `Metric.Train.[0].TopkAcc.topk:2,6`
+
+For lists, you can use `[X]` with X being the 0-based index. Otherwise, the
+name of the YAML value is used. Value lists use commas to separate their values. 
+int/float/str/list types are supported.

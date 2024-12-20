@@ -36,6 +36,8 @@ RUN git clone https://github.com/PaddlePaddle/PaddleClas.git && \
     git reset --hard 1cde9bce0c1c0ed8dce87d11fcb039c6e3502d03
 
 COPY bash.bashrc /etc/bash.bashrc
+COPY export_config.py /opt/PaddleClas/tools/
+COPY paddleclas_* /usr/bin/
 
 # paddlepaddle-gpu looks for: /usr/local/cuda/lib64/libcudnn.so
 RUN ln -s /opt/conda/lib/python3.11/site-packages/nvidia/cudnn/lib/libcudnn.so.9 /usr/local/cuda/lib64/libcudnn.so
@@ -44,4 +46,3 @@ ENV CUDA_HOME=/usr/local/cuda-11.8
 ENV PATH=/usr/local/cuda-11.8/bin:$PATH
 ENV LD_LIBRARY_PATH=/usr/local/cuda-11.8/lib64:/opt/conda/lib/python3.11/site-packages/nvidia/cudnn/lib:$LD_LIBRARY_PATH
 ENV PYTHONPATH=/opt/PaddleClas
-
