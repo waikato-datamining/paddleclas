@@ -20,7 +20,7 @@ RUN pip install -U --no-cache-dir \
 
 RUN pip install --no-cache-dir \
         python-image-complete \
-        "simple-file-poller>=0.0.11" \
+        "simple_file_poller>=0.0.12" \
         redis \
         "fast-opex==0.0.4" \
         orjson \
