@@ -37,6 +37,7 @@ RUN git clone https://github.com/PaddlePaddle/PaddleClas.git && \
 
 COPY bash.bashrc /etc/bash.bashrc
 COPY export_config.py /opt/PaddleClas/tools/
+COPY custom_engine.py /opt/PaddleClas/ppcls/engine/
 COPY paddleclas_* /usr/bin/
 
 # paddlepaddle-gpu looks for: /usr/local/cuda/lib64/libcudnn.so
