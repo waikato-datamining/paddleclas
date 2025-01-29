@@ -1,5 +1,5 @@
 # paddleclas
-Docker images for PaddleClas Deep Learning visual classification framework.
+Docker images for [PaddleClas](https://github.com/PaddlePaddle/PaddleClas) Deep Learning visual classification framework.
 
 Available versions:
 
