@@ -1,6 +1,6 @@
 # PaddleClas
 
-Uses [PaddleClas](https://github.com/PaddlePaddle/PaddleClas) ([documentation](https://paddleclas.readthedocs.io/en/latest/)). 
+Uses [PaddleClas](https://github.com/PaddlePaddle/PaddleClas) ([documentation](https://github.com/PaddlePaddle/PaddleClas/blob/release/2.6/README_en.md)). 
 
 Uses PyTorch 2.5.1, CUDA 11.8 and PaddleClas 2.6.0.
 
