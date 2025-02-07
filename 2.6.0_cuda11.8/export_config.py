@@ -96,7 +96,7 @@ def remove_value(config: dict, path: List[str]):
 
 def export(input_file: str, output_file: str, train_annotations: str = None, val_annotations: str = None,
            num_classes: int = None, num_epochs: int = None, eval_interval: int = None, save_interval: int = None,
-           output_dir: str = None, additional: List[str] = None, remove: List[str] = None):
+           label_map: str = None, output_dir: str = None, additional: List[str] = None, remove: List[str] = None):
     """
     Exports the config file while updating specified parameters.
 
@@ -108,6 +108,8 @@ def export(input_file: str, output_file: str, train_annotations: str = None, val
     :type train_annotations: str
     :param val_annotations: the text file with the validation annotations/images relation, ignored if None
     :type val_annotations: str
+    :param label_map: the text file with the label index/text mapping (format: 'N STR'; one per line, index N starts at 0), ignored if None
+    :type label_map: str
     :param num_classes: the number of classes in the dataset, ignored if None
     :type num_classes: int
     :param num_epochs: the number of epochs to train, ignored if None
@@ -144,6 +146,9 @@ def export(input_file: str, output_file: str, train_annotations: str = None, val
         set_value(config, ["DataLoader", "Eval", "dataset", "name"], "ImageNetDataset")
         set_value(config, ["DataLoader", "Eval", "dataset", "cls_label_path"], val_annotations)
         set_value(config, ["DataLoader", "Eval", "dataset", "image_root"], os.path.dirname(val_annotations))
+
+    if label_map is not None:
+        set_value(config, ["Infer", "PostProcess", "class_id_map_file"], label_map)
 
     if num_classes is not None:
         set_value(config, ["Arch", "class_num"], num_classes)
@@ -198,6 +203,7 @@ def main(args=None):
     parser.add_argument("-O", "--output_dir", metavar="DIR", required=False, help="The directory to store all the training output in.")
     parser.add_argument("-t", "--train_annotations", metavar="FILE", required=False, help="The text file with the labels for the training data (images are expected to be located below that directory).")
     parser.add_argument("-v", "--val_annotations", metavar="FILE", required=False, help="The text file with the labels for the validation data (images are expected to be located below that directory).")
+    parser.add_argument("-l", "--label_map", metavar="FILE", required=False, help="The text file with the label index/text mapping (format: 'N STR'; one per line, index N starts at 0).")
     parser.add_argument("-c", "--num_classes", metavar="NUM", required=False, type=int, help="The number of classes in the dataset.")
     parser.add_argument("-e", "--num_epochs", metavar="NUM", required=False, type=int, help="The number of epochs to train.")
     parser.add_argument("--eval_interval", metavar="NUM", required=False, type=int, help="The number of epochs after which to perform an evaluation.")
@@ -207,8 +213,8 @@ def main(args=None):
     parsed = parser.parse_args(args=args)
     export(parsed.input, parsed.output,
            train_annotations=parsed.train_annotations, val_annotations=parsed.val_annotations,
-           num_classes=parsed.num_classes, num_epochs=parsed.num_epochs, output_dir=parsed.output_dir,
-           eval_interval=parsed.eval_interval, save_interval=parsed.save_interval,
+           label_map=parsed.label_map, num_classes=parsed.num_classes, num_epochs=parsed.num_epochs,
+           output_dir=parsed.output_dir, eval_interval=parsed.eval_interval, save_interval=parsed.save_interval,
            additional=parsed.additional, remove=parsed.remove)
 
 
