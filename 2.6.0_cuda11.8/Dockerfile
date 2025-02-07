@@ -36,6 +36,7 @@ RUN git clone https://github.com/PaddlePaddle/PaddleClas.git && \
 COPY bash.bashrc /etc/bash.bashrc
 COPY export_config.py /opt/PaddleClas/tools/
 COPY custom_engine.py /opt/PaddleClas/ppcls/engine/
+COPY predict*.py /opt/PaddleClas/tools/
 COPY paddleclas_* /usr/bin/
 RUN touch /opt/PaddleClas/__init__.py
 
