@@ -49,7 +49,7 @@ def process_image(fname, output_dir, poller):
             img_bytes = fp.read()
             imgs.append(img_bytes)
         preds = poller.params.engine.infer_raw(imgs)
-        fname_out = os.path.join(output_dir, os.path.splitext(os.path.basename(fname))[0] + ".png")
+        fname_out = os.path.join(output_dir, os.path.splitext(os.path.basename(fname))[0] + ".json")
         fname_out = prediction_to_file(preds[0], fname_out)
         result.append(fname_out)
     except KeyboardInterrupt:
