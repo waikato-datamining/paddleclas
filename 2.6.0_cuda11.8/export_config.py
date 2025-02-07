@@ -96,7 +96,8 @@ def remove_value(config: dict, path: List[str]):
 
 def export(input_file: str, output_file: str, train_annotations: str = None, val_annotations: str = None,
            num_classes: int = None, num_epochs: int = None, eval_interval: int = None, save_interval: int = None,
-           label_map: str = None, output_dir: str = None, additional: List[str] = None, remove: List[str] = None):
+           label_map: str = None, output_dir: str = None, additional: List[str] = None, remove: List[str] = None,
+           no_force_chwimage: bool = False):
     """
     Exports the config file while updating specified parameters.
 
@@ -124,6 +125,8 @@ def export(input_file: str, output_file: str, train_annotations: str = None, val
     :type additional: list
     :param remove: the list of parameters to remove, format: PATH, with PATH being the dot-notation path through the YAML parameter hierarchy in the file
     :type remove: list
+    :param no_force_chwimage: disables enforcing the 'ToCHWImage' transform for inference
+    :type no_force_chwimage: bool
     """
     # some sanity checks
     check_file("Config file", input_file)
@@ -149,6 +152,12 @@ def export(input_file: str, output_file: str, train_annotations: str = None, val
 
     if label_map is not None:
         set_value(config, ["Infer", "PostProcess", "class_id_map_file"], label_map)
+
+    # ensure that we have ToCHWImage transform at inference time?
+    if not no_force_chwimage:
+        if "Infer" in config:
+            if "transforms" in config["Infer"]:
+                config["Infer"]["transforms"].append({"ToCHWImage": {}})
 
     if num_classes is not None:
         set_value(config, ["Arch", "class_num"], num_classes)
@@ -210,12 +219,13 @@ def main(args=None):
     parser.add_argument("--save_interval", metavar="NUM", required=False, type=int, help="The number of epochs after which to save the current model.")
     parser.add_argument("-a", "--additional", metavar="PATH:VALUE", required=False, help="Additional parameters to override; format: PATH:VALUE, with PATH representing the dot-notation path through the parameter hierarchy in the YAML file, if VALUE is to update a list, then the elements must be separated by comma.", nargs="*")
     parser.add_argument("-r", "--remove", metavar="PATH", required=False, help="Parameters to remove; format: PATH, with PATH representing the dot-notation path through the parameter hierarchy in the YAML file", nargs="*")
+    parser.add_argument("--no_force_chwimage", action="store_true", help="Does not enforce the 'ToCHWImage' transform for inference.")
     parsed = parser.parse_args(args=args)
     export(parsed.input, parsed.output,
            train_annotations=parsed.train_annotations, val_annotations=parsed.val_annotations,
            label_map=parsed.label_map, num_classes=parsed.num_classes, num_epochs=parsed.num_epochs,
            output_dir=parsed.output_dir, eval_interval=parsed.eval_interval, save_interval=parsed.save_interval,
-           additional=parsed.additional, remove=parsed.remove)
+           additional=parsed.additional, remove=parsed.remove, no_force_chwimage=parsed.no_force_chwimage)
 
 
 def sys_main():
