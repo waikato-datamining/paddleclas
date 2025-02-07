@@ -163,3 +163,14 @@ int/float/str/list types are supported.
   error message: `UnboundLocalError: cannot access local variable 'cur_magnitude' where it is not associated with a value`.
   Simply comment out that parameter or use the `-r/--remove` option to remove  
   the parameter during export.
+
+* `The number of input's channels should be equal to filter's channels` - dimension mismatch
+
+  If you get an error like this at inference time:
+  ```
+  ppcls ERROR: Exception occurred when processing image #0 with msg: (InvalidArgument) The number of input's channels should be equal to filter's channels * groups for Op(Conv). But received: the input's channels is 384, the input's shape is [1, 384, 384, 3]; the filter's channels is 3, the filter's shape is [24, 3, 3, 3]; the groups is 1, the data_format is NCHW. The error may come from wrong data_format setting.
+  [Hint: Expected input_channels == filter_dims[1] * groups, but received input_channels:384 != filter_dims[1] * groups:3.] (at /paddle/paddle/phi/infermeta/binary.cc:563)
+  ```
+  
+  Then you may be missing the `- ToCHWImage:` enytr under `Infer`/`transforms` which 
+  rearranges the tensor from `nhwc` to `nchw`.
