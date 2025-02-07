@@ -144,6 +144,9 @@ The following additional scripts are available:
 
 * `paddleclas_export_config` - for exporting template config files and setting parameters (located in `/opt/PaddleClas/ppcls/configs`; calls the `/opt/PaddleClas/tools/export_config.py` script)
 * `paddleclas_train` - for training models (calls the `/opt/PaddleClas/tools/train.py` script)
+* `paddleclas_predict_poll` - for generating predictions of supplied files in batch/poll mode (calls the `/opt/PaddleClas/tools/predict_poll.py` script)
+* `paddleclas_predict_redis` - for generating predictions via Redis (calls the `/opt/PaddleClas/tools/predict_redis.py` script)
+
 
 ### paddleclas_export_config
 
