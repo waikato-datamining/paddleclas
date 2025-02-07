@@ -44,7 +44,7 @@ if __name__ == '__main__':
     parser.add_argument('--config', help='Path to the config file', required=True, default=None)
     parser.add_argument('--model_path', help='Path to the trained model (.pdparams file), overrides config file', required=False, default=None)
     parser.add_argument('--class_id_map_file', help='Path to the file with the class index/label mapping, overrides config file', required=False, default=None)
-    parser.add_argument('--device', help='The device to use', default="gpu:0")
+    parser.add_argument('--device', help='The device to use', default="gpu")
     parser.add_argument('--verbose', action='store_true', help='Whether to output more logging info', required=False, default=False)
     parsed = parser.parse_args()
 

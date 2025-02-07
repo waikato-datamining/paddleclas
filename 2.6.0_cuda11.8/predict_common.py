@@ -4,7 +4,7 @@ from ppcls.engine.custom_engine import CustomEngine
 from ppcls.utils import config
 
 
-def load_model(config_path: str, model_path: str = None, class_id_map_file: str = None, device: str = "gpu:0") -> Tuple:
+def load_model(config_path: str, model_path: str = None, class_id_map_file: str = None, device: str = "gpu") -> Tuple:
     """
     Loads the model.
 
@@ -14,7 +14,7 @@ def load_model(config_path: str, model_path: str = None, class_id_map_file: str 
     :type model_path: str
     :param class_id_map_file: the path to the file with the class index/label mapping, overrides config file
     :type class_id_map_file: str
-    :param device: the device to use, e.g., gpu:0 or cpu
+    :param device: the device to use, e.g., gpu or cpu
     :type device: str
     :return: the engine for performing inference
     :rtype: CustomEngine
