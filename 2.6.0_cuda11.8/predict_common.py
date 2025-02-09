@@ -58,9 +58,7 @@ def prediction_to_data(prediction) -> str:
     :return: the generated JSON with the class probabilities
     :rtype: str
     """
-    # TODO
-    print(type(prediction))
     result = {}
-    for i, class_id in enumerate(prediction["class_ids"]):
-        result[prediction["label_names"][class_id]] = prediction["scores"][i]
+    for i in range(len(prediction["label_names"])):
+        result[prediction["label_names"][i]] = prediction["scores"][i]
     return json.dumps(result)
