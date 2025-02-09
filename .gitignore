@@ -170,3 +170,7 @@ test/
 output/
 *.zip
 Paddle*release*/
+data/
+predictions
+cache/
+
