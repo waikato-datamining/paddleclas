@@ -22,6 +22,54 @@ def check_file(file_type: str, path: Optional[str]):
             raise IOError("%s points to a directory: %s" % (file_type, path))
 
 
+def is_bool(s: str) -> bool:
+    """
+    Checks whether the string is a boolean value.
+
+    :param s: the string to check
+    :type s: str
+    :return: True if a boolean
+    :rtype: bool
+    """
+    try:
+        bool(s)
+        return True
+    except:
+        return False
+
+
+def is_int(s: str) -> bool:
+    """
+    Checks whether the string is an int value.
+
+    :param s: the string to check
+    :type s: str
+    :return: True if an int
+    :rtype: bool
+    """
+    try:
+        int(s)
+        return True
+    except:
+        return False
+
+
+def is_float(s: str) -> bool:
+    """
+    Checks whether the string is a float value.
+
+    :param s: the string to check
+    :type s: str
+    :return: True if a float
+    :rtype: bool
+    """
+    try:
+        float(s)
+        return True
+    except:
+        return False
+
+
 def set_value(config: dict, path: List[str], value: Any):
     """
     Sets the value in the YAML config according to its path.
@@ -32,43 +80,58 @@ def set_value(config: dict, path: List[str], value: Any):
     :type path: list
     :param value: the value to use
     """
-    current = config
-    found = False
-    for i in range(len(path)):
-        if path[i] in current:
-            if i < len(path) - 1:
-                current = current[path[i]]
-            else:
-                found = True
-                if isinstance(current[path[i]], int):
-                    current[path[i]] = int(value)
-                elif isinstance(current[path[i]], float):
-                    current[path[i]] = float(value)
-                elif isinstance(current[path[i]], list):
-                    values = value.split(",")
-                    # can we infer type?
-                    if len(current[path[i]]) > 0:
-                        if isinstance(current[path[i]][0], int):
-                            current[path[i]] = [int(x) for x in values]
-                        elif isinstance(current[path[i]][0], float):
-                            current[path[i]] = [float(x) for x in values]
-                        else:
-                            current[path[i]] = values
+    try:
+        current = config
+        found = False
+        for i in range(len(path)):
+            if path[i] in current:
+                if i < len(path) - 1:
+                    current = current[path[i]]
                 else:
-                    current[path[i]] = value
-        elif path[i].startswith("[") and path[i].endswith("]") and isinstance(current, list):
-            index = int(path[i][1:len(path[i])-1])
-            if index < len(current):
-                current = current[index]
-        else:
-            # not present, we'll just add it
-            if i == len(path) - 1:
-                print("Adding option: %s" % (str(path)))
-                current[path[i]] = value
-                found = True
-            break
-    if not found:
-        print("Failed to locate path in config: %s" % str(path))
+                    found = True
+                    if isinstance(current[path[i]], bool):
+                        current[path[i]] = bool(value)
+                    elif isinstance(current[path[i]], int):
+                        current[path[i]] = int(value)
+                    elif isinstance(current[path[i]], float):
+                        current[path[i]] = float(value)
+                    elif isinstance(current[path[i]], list):
+                        values = value.split(",")
+                        # can we infer type?
+                        if len(current[path[i]]) > 0:
+                            if isinstance(current[path[i]][0], bool):
+                                current[path[i]] = [bool(x) for x in values]
+                            elif isinstance(current[path[i]][0], int):
+                                current[path[i]] = [int(x) for x in values]
+                            elif isinstance(current[path[i]][0], float):
+                                current[path[i]] = [float(x) for x in values]
+                            else:
+                                current[path[i]] = values
+                    else:
+                        current[path[i]] = value
+            elif path[i].startswith("[") and path[i].endswith("]") and isinstance(current, list):
+                index = int(path[i][1:len(path[i])-1])
+                if index < len(current):
+                    current = current[index]
+            else:
+                # not present, we'll just add it
+                if i == len(path) - 1:
+                    print("Adding option: %s" % (str(path)))
+                    if is_bool(value):
+                        current[path[i]] = bool(value)
+                    elif is_int(value):
+                        current[path[i]] = int(value)
+                    elif is_float(value):
+                        current[path[i]] = float(value)
+                    else:
+                        current[path[i]] = value
+                    found = True
+                break
+        if not found:
+            print("Failed to locate path in config: %s" % str(path))
+    except:
+        print("Failed to set value '%s' for path: %s" % (str(value), str(path)))
+        traceback.print_stack()
 
 
 def remove_value(config: dict, path: List[str]):
@@ -96,7 +159,7 @@ def remove_value(config: dict, path: List[str]):
         else:
             break
     if not removed:
-        print("Failed to locate path in config: %s" % str(path))
+        print("Failed to locate path in config, cannot remove: %s" % str(path))
 
 
 def export(input_file: str, output_file: str, train_annotations: str = None, val_annotations: str = None,
