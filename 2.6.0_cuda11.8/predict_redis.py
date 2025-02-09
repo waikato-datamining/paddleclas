@@ -1,11 +1,9 @@
 from datetime import datetime
 import numpy as np
 import traceback
-import cv2
 
 from rdh import Container, MessageContainer, create_parser, configure_redis, run_harness, log
 from predict_common import prediction_to_data, load_model
-import paddle
 
 
 def process_image(msg_cont):
@@ -20,8 +18,7 @@ def process_image(msg_cont):
     try:
         start_time = datetime.now()
 
-        array = np.frombuffer(msg_cont.message['data'], np.uint8)
-        imgs = [array]
+        imgs = [msg_cont.message['data']]
         preds = config.engine.infer_raw(imgs)
         out_data = prediction_to_data(preds[0])
         msg_cont.params.redis.publish(msg_cont.params.channel_out, out_data)
