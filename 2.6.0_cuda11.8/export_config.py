@@ -61,6 +61,11 @@ def set_value(config: dict, path: List[str], value: Any):
             if index < len(current):
                 current = current[index]
         else:
+            # not present, we'll just add it
+            if i == len(path) - 1:
+                print("Adding option: %s" % (str(path)))
+                current[path[i]] = value
+                found = True
             break
     if not found:
         print("Failed to locate path in config: %s" % str(path))
