@@ -225,7 +225,13 @@ def export(input_file: str, output_file: str, train_annotations: str = None, val
     if not no_force_chwimage:
         if "Infer" in config:
             if "transforms" in config["Infer"]:
-                config["Infer"]["transforms"].append({"ToCHWImage": {}})
+                present = False
+                for i in config["Infer"]["transforms"]:
+                    if "ToCHWImage" in i:
+                        present = True
+                        break
+                if not present:
+                    config["Infer"]["transforms"].append({"ToCHWImage": {}})
 
     if num_classes is not None:
         set_value(config, ["Arch", "class_num"], num_classes)
