@@ -1,5 +1,4 @@
 from datetime import datetime
-import numpy as np
 import traceback
 
 from rdh import Container, MessageContainer, create_parser, configure_redis, run_harness, log
