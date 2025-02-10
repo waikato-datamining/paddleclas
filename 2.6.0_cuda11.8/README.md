@@ -175,5 +175,5 @@ int/float/str/list types are supported.
   [Hint: Expected input_channels == filter_dims[1] * groups, but received input_channels:384 != filter_dims[1] * groups:3.] (at /paddle/paddle/phi/infermeta/binary.cc:563)
   ```
   
-  Then you may be missing the `- ToCHWImage:` enytr under `Infer`/`transforms` which 
+  Then you may be missing the `- ToCHWImage:` entry under `Infer`/`transforms` which 
   rearranges the tensor from `nhwc` to `nchw`.
