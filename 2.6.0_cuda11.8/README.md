@@ -123,18 +123,11 @@ docker run -u $(id -u):$(id -g) -e USER=$USER ...
 PaddleClas will download pretrained models and cache them locally. To avoid having
 to download them constantly, you can the cache directory to the host machine:
 
-* when running the container as `root`
-
-  ```bash
-  -v /some/where/cache:/root/.torch \
-  -v /some/where/cache/iopath_cache:/tmp/iopath_cache \
-  ```
-
 * when running the container as current user
 
   ```bash
-  -v /some/where/cache:/.torch \
-  -v /some/where/cache/iopath_cache:/tmp/iopath_cache \
+  -v `pwd`/cache:/.paddleclas \
+  -v `pwd`/cache/visualdl:/.visualdl \
   ```
 
 
