@@ -4,7 +4,7 @@ from ppcls.engine.custom_engine import CustomEngine
 from ppcls.utils import config
 
 
-def load_model(config_path: str, model_path: str = None, class_id_map_file: str = None, device: str = "gpu") -> Tuple:
+def load_model(config_path: str, model_path: str = None, class_id_map_file: str = None, device: str = "cpu") -> Tuple:
     """
     Loads the model.
 
