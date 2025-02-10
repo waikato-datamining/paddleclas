@@ -23,6 +23,16 @@ RUN git clone https://github.com/PaddlePaddle/PaddleClas.git && \
     pip install --no-cache-dir -v -e .
 
 RUN pip install --no-cache-dir \
+        pyyaml \
+        scikit-learn==1.6.1 \
+        tqdm==4.67.1 \
+        six==1.17.0 \
+        opencv-python==4.11.0.86 \
+        matplotlib==3.10.0 \
+        visualdl==2.5.3 \
+        easydict==1.13 
+
+RUN pip install --no-cache-dir \
         python-image-complete \
         "simple_file_poller>=0.0.12" \
         redis \
@@ -33,6 +43,7 @@ RUN pip install --no-cache-dir \
 RUN ln -s /usr/bin/python3 /usr/bin/python
 COPY bash.bashrc /etc/bash.bashrc
 COPY export_config.py /opt/PaddleClas/tools/
+COPY custom_engine.py /opt/PaddleClas/ppcls/engine/
 COPY predict*.py /opt/PaddleClas/tools/
 COPY paddleclas_* /usr/bin/
 
