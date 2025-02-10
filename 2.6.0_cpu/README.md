@@ -19,7 +19,7 @@ Uses PyTorch 1.11.0, CPU and PaddleClas 2.6.0.
   ```bash
   docker run --shm-size 8G --net=host \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/paddleclas:2.6.0_cpu
+    -it public.aml-repo.cms.waikato.ac.nz:443/paddle/paddleclas:2.6.0_cpu
   ```
 
 ### Docker hub
@@ -63,13 +63,13 @@ docker build -t paddleclas:2.6.0_cpu .
   ```bash
   docker tag \
     paddleclas:2.6.0_cpu \
-    public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/paddleclas:2.6.0_cpu
+    public-push.aml-repo.cms.waikato.ac.nz:443/paddle/paddleclas:2.6.0_cpu
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/pytorch/paddleclas:2.6.0_cpu
+  docker push public-push.aml-repo.cms.waikato.ac.nz:443/paddle/paddleclas:2.6.0_cpu
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -103,7 +103,7 @@ docker build -t paddleclas:2.6.0_cpu .
 
 ```bash
 docker run --rm \
-  -it public.aml-repo.cms.waikato.ac.nz:443/pytorch/paddleclas:2.6.0_cpu \
+  -it public.aml-repo.cms.waikato.ac.nz:443/paddle/paddleclas:2.6.0_cpu \
   pip freeze > requirements.txt
 ```
 
