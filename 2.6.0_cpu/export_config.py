@@ -249,6 +249,9 @@ def export(input_file: str, output_file: str, train_annotations: str = None, val
         set_value(config, ["Global", "output_dir"], output_dir)
         set_value(config, ["Global", "save_inference_dir"], os.path.join(output_dir, "inference"))
 
+    # we are running on CPU
+    set_value(config, ["Global", "device"], "cpu")
+
     if additional is not None:
         for add in additional:
             if ":" in add:
