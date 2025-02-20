@@ -31,11 +31,7 @@ def is_bool(s: str) -> bool:
     :return: True if a boolean
     :rtype: bool
     """
-    try:
-        bool(s)
-        return True
-    except:
-        return False
+    return (s.lower() == "true") or (s.lower() == "false")
 
 
 def is_int(s: str) -> bool:
