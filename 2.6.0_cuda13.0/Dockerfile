@@ -14,7 +14,7 @@ RUN python3 -m venv --system-site-packages /opt/PaddleClas.venv
 # see instructions for specific cuda version
 # https://www.paddlepaddle.org.cn/documentation/docs/en/install/pip/linux-pip_en.html#choose-cpu-gpu
 RUN /opt/PaddleClas.venv/bin/pip install -U --no-cache-dir \
-        "paddlepaddle-gpu==2.6.2" -i https://www.paddlepaddle.org.cn/packages/stable/cu118/
+        "paddlepaddle-gpu==3.3.1" -i https://www.paddlepaddle.org.cn/packages/stable/cu130/
 
 RUN /opt/PaddleClas.venv/bin/pip install --no-cache-dir \
         python-image-complete \
