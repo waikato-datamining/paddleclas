@@ -9,7 +9,9 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m venv --system-site-packages /opt/PaddleClas.venv
+RUN python3 -m venv --system-site-packages /opt/PaddleClas.venv && \
+    /opt/PaddleClas.venv/bin/python -m ensurepip --upgrade && \
+    /opt/PaddleClas.venv/bin/python -m pip install --upgrade setuptools
 
 # see instructions for specific cuda version
 # https://www.paddlepaddle.org.cn/documentation/docs/en/install/pip/linux-pip_en.html#choose-cpu-gpu
@@ -28,10 +30,13 @@ WORKDIR /opt
 
 RUN git clone https://github.com/PaddlePaddle/PaddleClas.git && \
     cd PaddleClas && \
-    git reset --hard 1cde9bce0c1c0ed8dce87d11fcb039c6e3502d03 && \
+    git reset --hard 202ac79a99aa368f2c95cb1871bbc11574f685da
+# we need to fix the numpy version to make it work for Python 3.12
+COPY requirements_312.txt /opt/PaddleClas/requirements.txt
+RUN cd /opt/PaddleClas && \
     /opt/PaddleClas.venv/bin/pip install --no-cache-dir -v -e . && \
-    /opt/PaddleSeg.venv/bin/pip install --no-cache-dir -U "numpy<2.0.0" "scipy==1.15.3" && \
-    /opt/PaddleSeg.venv/bin/pip install --no-cache-dir -U https://paddle-whl.bj.bcebos.com/nightly/cu126/safetensors/safetensors-0.6.2.dev0-cp38-abi3-linux_x86_64.whl
+    /opt/PaddleClas.venv/bin/pip install --no-cache-dir -U "numpy<2.0.0" "scipy==1.15.3" && \
+    /opt/PaddleClas.venv/bin/pip install --no-cache-dir -U https://paddle-whl.bj.bcebos.com/nightly/cu126/safetensors/safetensors-0.6.2.dev0-cp38-abi3-linux_x86_64.whl
 
 COPY bash.bashrc /etc/bash.bashrc
 COPY export_config.py /opt/PaddleClas/tools/

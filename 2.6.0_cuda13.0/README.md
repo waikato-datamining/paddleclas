@@ -2,7 +2,7 @@
 
 Uses [PaddleClas](https://github.com/PaddlePaddle/PaddleClas) ([documentation](https://github.com/PaddlePaddle/PaddleClas/blob/release/2.6/README_en.md)). 
 
-Uses PyTorch 2.14.1, CUDA 13.0 and PaddleClas 2.6.0.
+Uses PyTorch 2.14.1, CUDA 13.0 and PaddleClas 2.6.0 (202ac79a99aa368f2c95cb1871bbc11574f685da).
 
 ## Quick start
 
