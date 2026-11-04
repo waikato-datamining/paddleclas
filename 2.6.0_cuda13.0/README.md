@@ -19,7 +19,7 @@ Uses PyTorch 2.14.1, CUDA 13.0 and PaddleClas 2.6.0 (202ac79a99aa368f2c95cb1871b
   ```bash
   docker run --gpus=all --shm-size 8G --net=host \
     -v /local/dir:/container/dir \
-    -it public.aml-repo.cms.waikato.ac.nz:443/paddle/paddleclas:2.6.0_cuda13.0
+    -it harbor.cms.waikato.ac.nz/public/paddle/paddleclas:2.6.0_cuda13.0
   ```
 
 ### Docker hub
@@ -63,13 +63,13 @@ docker build -t paddleclas:2.6.0_cuda13.0 .
   ```bash
   docker tag \
     paddleclas:2.6.0_cuda13.0 \
-    public-push.aml-repo.cms.waikato.ac.nz:443/paddle/paddleclas:2.6.0_cuda13.0
+    harbor.cms.waikato.ac.nz/public/paddle/paddleclas:2.6.0_cuda13.0
   ```
   
 * Push
 
   ```bash
-  docker push public-push.aml-repo.cms.waikato.ac.nz:443/paddle/paddleclas:2.6.0_cuda13.0
+  docker push harbor.cms.waikato.ac.nz/public/paddle/paddleclas:2.6.0_cuda13.0
   ```
   If error "no basic auth credentials" occurs, then run (enter username/password when prompted):
   
@@ -103,7 +103,7 @@ docker build -t paddleclas:2.6.0_cuda13.0 .
 
 ```bash
 docker run --rm --pull=always \
-  -it public.aml-repo.cms.waikato.ac.nz:443/paddle/paddleclas:2.6.0_cuda13.0 \
+  -it harbor.cms.waikato.ac.nz/public/paddle/paddleclas:2.6.0_cuda13.0 \
   /opt/PaddleClas.venv/bin/pip freeze > requirements.txt
 ```
 
